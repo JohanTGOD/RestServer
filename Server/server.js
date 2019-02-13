@@ -1,52 +1,27 @@
 require('./config/config');
 const express = require('express')
 const app = express()
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
  
 // parse application/json
 app.use(bodyParser.json())
- 
-app.get('/usuario', function (req, res) {
-  res.json('get')
-})
+
+// De esta manera importo y uso las rutas del usuarios como inicializar un drive rque ya tengo
+app.use(require('./routes/usuario'));
+
+  mongoose.connect('mongodb://localhost:27017/cafe',(err,res)=>{
+  if (err) {
+      throw new err;
+  }else{
+
+    console.log("base de datos conectadada");
+  }
+
+  });
 
 
-app.post('/usuario', function (req, res) {
-
-    let body = req.body;
-
-
-    if (body.nombre === undefined) {
-          res.status(400).json({
-
-            ok:false,
-            mensaje:"El nombre es un caracter obligatorio"
-          })   
-    }else{
-
-        res.json({
-            body
-        })
-    }
-   
-  })
-
-
-  app.put('/usuario/:idJohan', function (req, res) {
-      let id = req.params.idJohan
-
-      res.json({
-          id
-      })
-    res.json('put')
-  })
-
-
-  app.delete('/usuario', function (req, res) {
-    res.json('delete')
-  })
- 
 app.listen(process.env.PORT)
