@@ -13,15 +13,18 @@ app.use(bodyParser.json())
 // De esta manera importo y uso las rutas del usuarios como inicializar un drive rque ya tengo
 app.use(require('./routes/usuario'));
 
-  mongoose.connect('mongodb://localhost:27017/cafe',(err,res)=>{
-  if (err) {
-      throw new err;
-  }else{
-
-    console.log("base de datos conectadada");
-  }
-
-  });
 
 
-app.listen(process.env.PORT)
+  mongoose.connect(process.env.URLDB,{ useNewUrlParser: true })
+    .then(()=>{
+        console.log("Connected to mongo database");
+    })
+    .catch((err)=>{
+        console.log("Error connecting mongo database",err);
+    });
+
+
+app.listen(process.env.PORT,()=>{
+
+console.log("Escuchando puerto: ",process.env.PORT)
+})
